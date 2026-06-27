@@ -9,9 +9,10 @@ app.use(cors());
 app.use(express.json());
 
 // ─── Identity ─────────────────────────────────────────────────────────────────
-const USER_ID = 'student_27061999';
-const EMAIL_ID = 'student@chitkara.edu.in';
-const COLLEGE_ROLL_NUMBER = '2300000';
+const USER_ID = 'anuragsharma_23112005';
+const EMAIL_ID = 'anurag1103.be23@chitkarauniversity.edu.in';
+const COLLEGE_ROLL_NUMBER = '2311981103';
+
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function isValidEntry(raw) {
@@ -54,14 +55,15 @@ function hasCycleInGroup(nodes, adjMap) {
 
 function computeDepth(tree) {
   function dfs(obj) {
+    if (!obj || typeof obj !== 'object') return 0;
     const keys = Object.keys(obj);
-    if (keys.length === 0) return 1;
+    if (keys.length === 0) return 0;
     let maxD = 0;
-    for (const k of keys) maxD = Math.max(maxD, dfs(obj[k]));
-    return 1 + maxD;
+    for (const k of keys) {
+      maxD = Math.max(maxD, 1 + dfs(obj[k]));
+    }
+    return maxD;
   }
-  const roots = Object.keys(tree);
-  if (roots.length === 0) return 0;
   return dfs(tree);
 }
 
@@ -101,10 +103,22 @@ function processBFHL(data) {
   const childrenMap = {};
   const parentOf = {};
   const allNodes = new Set();
+  const orderOfNodes = [];
+  const seenNodesForOrder = new Set();
 
   for (const { parent, child } of validEdges) {
     allNodes.add(parent);
     allNodes.add(child);
+    
+    if (!seenNodesForOrder.has(parent)) {
+      seenNodesForOrder.add(parent);
+      orderOfNodes.push(parent);
+    }
+    if (!seenNodesForOrder.has(child)) {
+      seenNodesForOrder.add(child);
+      orderOfNodes.push(child);
+    }
+
     if (!childrenMap[parent]) childrenMap[parent] = [];
     if (parentOf[child] === undefined) {
       parentOf[child] = parent;
@@ -123,9 +137,13 @@ function processBFHL(data) {
   for (const { parent, child } of validEdges) union(parent, child);
 
   const groups = {};
-  for (const node of allNodes) {
+  const orderedReps = [];
+  for (const node of orderOfNodes) {
     const rep = find(node);
-    if (!groups[rep]) groups[rep] = [];
+    if (!groups[rep]) {
+      groups[rep] = [];
+      orderedReps.push(rep);
+    }
     groups[rep].push(node);
   }
 
@@ -134,7 +152,8 @@ function processBFHL(data) {
   for (const [child, parent] of Object.entries(parentOf)) adjForCycle[parent].push(child);
 
   const hierarchies = [];
-  for (const groupNodes of Object.values(groups)) {
+  for (const rep of orderedReps) {
+    const groupNodes = groups[rep];
     const cycle = hasCycleInGroup(groupNodes, adjForCycle);
     if (cycle) {
       const root = [...groupNodes].sort()[0];
@@ -150,12 +169,6 @@ function processBFHL(data) {
       }
     }
   }
-
-  hierarchies.sort((a, b) => {
-    if (a.has_cycle && !b.has_cycle) return 1;
-    if (!a.has_cycle && b.has_cycle) return -1;
-    return a.root.localeCompare(b.root);
-  });
 
   const nonCyclic = hierarchies.filter(h => !h.has_cycle);
   const cyclic = hierarchies.filter(h => h.has_cycle);
@@ -204,4 +217,3 @@ app.get('/bfhl', (req, res) => {
 app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 module.exports = app;
-
