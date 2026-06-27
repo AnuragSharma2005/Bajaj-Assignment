@@ -1,0 +1,32 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  text-align: center;
+}
+
+.value {
+  font-size: 1.9rem;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+.trees .value { color: var(--green); }
+.cycles .value { color: var(--red); }
+.largest .value { color: var(--accent2); }

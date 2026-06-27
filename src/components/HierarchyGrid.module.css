@@ -1,0 +1,75 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.empty {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  border-color: rgba(108, 99, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.cyclic {
+  border-color: rgba(248, 113, 113, 0.25);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.root {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent2);
+}
+
+.cycleBadge {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--red);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.depthBadge {
+  background: rgba(52, 211, 153, 0.1);
+  color: var(--green);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.visual {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.9;
+  color: var(--text);
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre;
+}
